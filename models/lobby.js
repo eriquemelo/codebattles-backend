@@ -8,6 +8,8 @@ function generateLobbyCode() {
 }
 
 
+  
+
 class Lobby {
     constructor(hostPlayer) {
         this.hostPlayer = hostPlayer
