@@ -96,28 +96,64 @@ exports.joinLobby = (req, res) => {
 }
 exports.leaveLobby = (req, res) => {
     const { username, lobbyCode } = req.body;
-    const matchedLobby = lobbies.find((lobby) => lobby.getLobbyCode() == lobbyCode)
-    if (matchedLobby == undefined) {
+    
+    // Generating a hash to locate the index of where it should be stored
+    const index = hash.generateHash(lobbyCode)
+    const element = lobbiesHashTable[index]
+    // If at the index the element is empty, we exit early and return a 404 NOT FOUND status    
+    if (element === undefined) {
+        res.status(404).json({ errorMessage: "Could not find a lobby with that lobby code" })
+    } 
+    let lobby;
+    // We loop through the array at the index in increments of two to find the right lobby code
+    for (let i=0; i<element.length;i+=2) {
+        if (i >= element.length) return
+        if (element[i] == lobbyCode) {
+            // We assign the lobby variable to the lobby element adjacent to the lobby code 
+            lobby = element[i+1]
+        }
+    }
+
+
+
+    if (lobby == undefined) {
         res.status(404).json({ errorMessage: "Could not find a lobby with that lobby code" })
     } else {
         // If the user leaving the match is the host, then we assign the role of host to the second user
-        if (username == matchedLobby.hostPlayer.username) {
-            matchedLobby.hostPlayer = matchedLobby.secondPlayer ? new Player(matchedLobby.secondPlayer.username) : null
-            matchedLobby.removeSecondPlayer()
+        if (username == lobby.hostPlayer.username) {
+            lobby.hostPlayer = lobby.secondPlayer ? new Player(lobby.secondPlayer.username) : null
+            lobby.removeSecondPlayer()
             res.status(200).json({ message: "Leaving" })
         } else {
-            matchedLobby.removeSecondPlayer()
+            lobby.removeSecondPlayer()
             res.status(200).json({ message: "Leaving"})
         }
     }
 }
 exports.startGame = (req, res) => {
-    const { username, lobbyCode } = req.body;
-    const matchedLobby = lobbies.find((lobby) => lobby.getLobbyCode() == lobbyCode)
-    if (matchedLobby == undefined) {
+    const { lobbyCode } = req.body;
+    // Generating a hash to locate the index of where it should be stored
+    const index = hash.generateHash(lobbyCode)
+    const element = lobbiesHashTable[index]
+    // If at the index the element is empty, we exit early and return a 404 NOT FOUND status    
+    if (element === undefined) {
+        res.status(404).json({ errorMessage: "Could not find a lobby with that lobby code" })
+    } 
+    let lobby;
+    // We loop through the array at the index in increments of two to find the right lobby code
+    for (let i=0; i<element.length;i+=2) {
+        if (i >= element.length) return
+        if (element[i] == lobbyCode) {
+            // We assign the lobby variable to the lobby element adjacent to the lobby code 
+            lobby = element[i+1]
+        }
+    }
+
+
+    if (lobby == undefined) {
         res.status(404).json({ errorMessage: "Could not find a lobby with that lobby code" })
     } else {
-        matchedLobby.startGame();
+        lobby.startGame();
         res.status(200).json({ message: "Game starting!" })
     }
 }
