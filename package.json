@@ -9,8 +9,14 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "bufferutil": "^4.0.9",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "express-ws": "^5.0.2"
+    "express-ws": "^5.0.2",
+    "jsonwebtoken": "^9.0.3",
+    "socket.io": "^4.8.1",
+    "utf-8-validate": "^6.0.5",
+    "ws": "^8.18.3"
   }
 }

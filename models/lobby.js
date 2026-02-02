@@ -17,12 +17,22 @@ class Lobby {
         this.lobbyCode = generateLobbyCode() 
         this.joinable = true;
         this.started = false;
+        this.rules_understood = 0;
+        this.currentRound = 1 
+        this.currentChallengePrompt = null
+        this.currentInputs = null 
+        this.currentOutputs = null
     } 
     getHostPlayer() {
         return this.hostPlayer
     }
     getSecondPlayer() {
         return this.secondPlayer
+    }
+    setChallenges(prompt, inputs, outputs) {
+        this.currentChallengePrompt = prompt;
+        this.currentInputs = inputs;
+        this.currentOutputs = outputs;
     }
     removeSecondPlayer() {
         this.secondPlayer = null;
@@ -32,11 +42,22 @@ class Lobby {
         this.secondPlayer = secondPlayer
         this.joinable = false
     }
+    setRole() {
+        const num = Math.floor(Math.random() * 2)
+        if (num == 0) {
+            this.hostPlayer.role = "Challenger"
+            this.secondPlayer.role = "Solver"
+        } else {
+            this.hostPlayer.role = "Solver"
+            this.secondPlayer.role = "Challenger"
+        }
+    }
     getLobbyCode() {
         return this.lobbyCode;
     }
     startGame() {
         this.started = true;
+        this.setRole()
     } 
 }
 module.exports = Lobby;
