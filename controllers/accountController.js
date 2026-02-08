@@ -11,7 +11,10 @@ exports.createAccount = async (req, res) => {
         `)
         insertIntoDatabase.run(email_address, hashedPassword)
         // Create JWT Token for user
-        const token = auth.signToken(email_address) 
+        
+        const user = db.query("SELECT * FROM Users WHERE email_address = ?").get(email_address)
+        const token = auth.signToken(email_address, user.UserID) 
+
         res.status(200).json({ result: "complete", token }) 
     } catch (error) {
         // if the error number is 2067 this means that email is already used on another record

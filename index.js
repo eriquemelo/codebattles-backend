@@ -1,5 +1,4 @@
 import gameWebSocketHandler from "./controllers/gameController.js"
-
 const express = require("express")
 const cors = require("cors")
 const app = express()
@@ -15,8 +14,6 @@ const io = new Server(server, {
         }
     }
 )
-
-
 
 app.use(cors({
     origin: "http://localhost:5173"

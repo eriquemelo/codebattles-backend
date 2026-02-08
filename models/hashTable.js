@@ -46,7 +46,7 @@ export class HashTable {
         } 
         for (let i=0; i<this.data[hash].length;i+=2) {
             if (this.data[hash][i] == key) {
-                this.data[hash] = this.data[hash].splice(i, 2) 
+                this.data[hash].splice(i, 2) 
                 return true
             }
         }

@@ -18,7 +18,7 @@ class Lobby {
         this.joinable = true;
         this.started = false;
         this.rules_understood = 0;
-        this.currentRound = 1 
+        this.currentRound = 0.5 
         this.currentChallengePrompt = null
         this.currentInputs = null 
         this.currentOutputs = null
@@ -51,6 +51,10 @@ class Lobby {
             this.hostPlayer.role = "Solver"
             this.secondPlayer.role = "Challenger"
         }
+    }
+    swapRole() {
+        this.hostPlayer.role = this.hostPlayer.role == "Challenger" ? "Solver" : "Challenger"
+        this.secondPlayer.role = this.secondPlayer.role == "Challenger" ? "Solver" : "Challenger"
     }
     getLobbyCode() {
         return this.lobbyCode;
