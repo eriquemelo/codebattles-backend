@@ -38,7 +38,7 @@ exports.signIntoAccount = async (req, res) => {
         if (!await Bun.password.verify(password, user.password)) { // Compare the password to the hashed password
             res.status(401).json({ result: "error", "error_message": "Password does not match"})
         }
-        const token = auth.signToken(email_address)
+        const token = auth.signToken(email_address, user.UserID) 
         res.status(200).json({ token })
    
     } catch (error) {
@@ -57,5 +57,19 @@ exports.verifyUserToken = async (req, res) => {
         res.status(200).json({ result: "verfied", payload }) 
     } catch (error) {
         res.status(400).json({ result: "error", error_message: "Invalid or expired token" }) 
+    }
+}
+exports.getUsersChallenges = async (req, res) => {
+    // Extract user ID from request 
+    try {
+        const { userID } = req.body; 
+        console.log(userID)
+        // Fetch all challenges belonging to the user that is requesting
+        const challengesQuery = db.query(`SELECT * FROM Challenges WHERE UserID = ?`)
+        const challenges = challengesQuery.all(userID); 
+        console.log(challenges)
+        res.status(200).json({ challenges })
+    } catch (error) {
+       res.status(400).json({ result: "error", error }) 
     }
 }
